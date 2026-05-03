@@ -21,7 +21,6 @@ if (isset($_SESSION['user_id'])) {
 $sql = "SELECT * FROM users WHERE 1=1";
 $params = [];
 
-//gagal mulu ngentot
 // Tambahkan filter pencarian
 if (!empty($search)) {
     $sql .= " AND (full_name LIKE :search OR website_title LIKE :search)";
@@ -34,8 +33,8 @@ if ($sort === 'name') {
 } elseif ($sort === 'most_viewed') {
     $sql .= " ORDER BY views_count DESC";
 } else {
-    // Newest
-    $sql .= " ORDER BY created_at DESC";
+    // NIM
+    $sql .= " ORDER BY nim ASC";
 }
 
 try {
@@ -98,22 +97,8 @@ try {
 </div>
 
 <div class="container">
-    
-    <div class="filter-bar">
-        <form action="proyek.php" method="GET" id="filterForm">
-            <input type="text" name="search" class="search-input" value="<?= htmlspecialchars($search ?? ''); ?>" placeholder="Cari nama mahasiswa atau judul website...">
-            
-            <select name="sort" class="sort-select" onchange="document.getElementById('filterForm').submit()">
-                <option value="newest" <?= (isset($sort) && $sort === 'newest') ? 'selected' : ''; ?>>Paling Baru</option>
-                <option value="name" <?= (isset($sort) && $sort === 'name') ? 'selected' : ''; ?>>Berdasarkan Nama (A-Z)</option>
-                <option value="most_viewed" <?= (isset($sort) && $sort === 'most_viewed') ? 'selected' : ''; ?>>Paling Populer</option>
-            </select>
-            
-            <button type="submit" class="btn-filter">Cari</button>
-        </form>
-    </div>
 
-    <?php if ($your_website && !empty($your_website['website_title'])): ?>
+    <?php if ($your_website): ?>
         <h2 class="section-header">Your Website</h2>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 400px)); margin-bottom: 50px;">
             <div class="card my-card">
@@ -124,13 +109,27 @@ try {
                         <span class="author-name"><?= htmlspecialchars($your_website['full_name']); ?></span>
                         <span class="badge-mine">Website Anda</span>
                     </div>
-                    <h3 class="card-title"><?= htmlspecialchars($your_website['website_title']); ?></h3>
+                    <h3 class="card-title"><?= htmlspecialchars($your_website['website_title'] ?? 'Belum ada judul'); ?></h3>
                     <p class="card-desc"><?= htmlspecialchars($your_website['bio'] ?? 'Tidak ada deskripsi singkat.'); ?></p>
                     <a href="detail.php?slug=<?= $your_website['slug']; ?>" class="btn-detail">Lihat Detail</a>
                 </div>
             </div>
         </div>
     <?php endif; ?>
+
+    <div class="filter-bar">
+        <form action="proyek.php" method="GET" id="filterForm">
+            <input type="text" name="search" class="search-input" value="<?= htmlspecialchars($search ?? ''); ?>" placeholder="Cari nama mahasiswa atau judul website...">
+            
+            <select name="sort" class="sort-select" onchange="document.getElementById('filterForm').submit()">
+                <option value="nim" <?= (isset($sort) && $sort === 'nim') ? 'selected' : ''; ?>>Berdasarkan NIM</option>
+                <option value="name" <?= (isset($sort) && $sort === 'name') ? 'selected' : ''; ?>>Berdasarkan Nama (A-Z)</option>
+                <option value="most_viewed" <?= (isset($sort) && $sort === 'most_viewed') ? 'selected' : ''; ?>>Paling Populer</option>
+            </select>
+            
+            <button type="submit" class="btn-filter">Cari</button>
+        </form>
+    </div>
 
     <h2 class="section-header">All Websites</h2>
     <div class="grid">

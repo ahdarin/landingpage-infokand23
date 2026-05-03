@@ -52,7 +52,7 @@ try {
         <a href="proyek.php">Proyek</a>
         <a href="tentang_kami.php">Tentang Kami</a>
         <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="edit_profil.php">Dashboard</a>
+            <a href="edit_profil.php">Profil</a>
             <a href="logout.php" style="color: red;">Logout</a>
         <?php else: ?>
             <a href="login.php">Login</a>

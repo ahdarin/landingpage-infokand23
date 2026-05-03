@@ -88,7 +88,7 @@ try {
 
     <div class="detail-card">
         <div class="profile-section">
-            <img src="<?= !empty($mhs['profile_photo']) ? $mhs['profile_photo'] : 'https://via.placeholder.com/150?text=User'; ?>" class="profile-img" alt="Foto Profil">
+            <img src="<?= !empty($mhs['profile_photo']) ? $mhs['profile_photo'] : 'https://placehold.co/150x150/e9ecef/495057?text=User'; ?>" class="profile-img" alt="Foto Profil">
             <div class="profile-info">
                 <h1><?= htmlspecialchars($mhs['full_name']); ?></h1>
                 <p>NIM: <?= htmlspecialchars($mhs['nim']); ?></p>
@@ -100,7 +100,7 @@ try {
         <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 35px;">
 
         <div class="project-content">
-            <img src="<?= !empty($mhs['thumbnail']) ? $mhs['thumbnail'] : 'https://via.placeholder.com/800x450?text=No+Thumbnail'; ?>" class="thumb-img" alt="Thumbnail Website">
+            <img src="<?= !empty($mhs['thumbnail']) ? $mhs['thumbnail'] : 'https://placehold.co/800x450/e9ecef/495057?text=No+Thumbnail'; ?>" class="thumb-img" alt="Thumbnail Website">
             
             <h2><?= htmlspecialchars($mhs['website_title'] ?? 'Belum ada judul website'); ?></h2>
             <p class="project-desc">
