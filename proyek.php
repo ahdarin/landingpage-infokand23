@@ -18,7 +18,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 // 3. Bangun query dinamis untuk "All Websites"
-$sql = "SELECT * FROM users WHERE website_title IS NOT NULL AND website_title != ''";
+$sql = "SELECT * FROM users WHERE 1=1";
 $params = [];
 
 // Tambahkan filter pencarian
@@ -99,13 +99,15 @@ try {
 <div class="container">
     
     <div class="filter-bar">
-        <form action="proyek.php" method="GET">
-            <input type="text" name="search" class="search-input" value="<?= htmlspecialchars($search); ?>" placeholder="Cari nama mahasiswa atau judul website...">
-            <select name="sort" class="sort-select" onchange="this.form.submit()">
-                <option value="newest" <?= $sort === 'newest' ? 'selected' : ''; ?>>Paling Baru</option>
-                <option value="name" <?= $sort === 'name' ? 'selected' : ''; ?>>Berdasarkan Nama (A-Z)</option>
-                <option value="most_viewed" <?= $sort === 'most_viewed' ? 'selected' : ''; ?>>Paling Populer</option>
+        <form action="proyek.php" method="GET" id="filterForm">
+            <input type="text" name="search" class="search-input" value="<?= htmlspecialchars($search ?? ''); ?>" placeholder="Cari nama mahasiswa atau judul website...">
+            
+            <select name="sort" class="sort-select" onchange="document.getElementById('filterForm').submit()">
+                <option value="newest" <?= (isset($sort) && $sort === 'newest') ? 'selected' : ''; ?>>Paling Baru</option>
+                <option value="name" <?= (isset($sort) && $sort === 'name') ? 'selected' : ''; ?>>Berdasarkan Nama (A-Z)</option>
+                <option value="most_viewed" <?= (isset($sort) && $sort === 'most_viewed') ? 'selected' : ''; ?>>Paling Populer</option>
             </select>
+            
             <button type="submit" class="btn-filter">Cari</button>
         </form>
     </div>
@@ -114,10 +116,10 @@ try {
         <h2 class="section-header">Your Website</h2>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 400px)); margin-bottom: 50px;">
             <div class="card my-card">
-                <img src="<?= !empty($your_website['thumbnail']) ? $your_website['thumbnail'] : 'https://via.placeholder.com/400x225?text=No+Thumbnail'; ?>" class="card-img" alt="Thumbnail">
+                <img src="<?= !empty($your_website['thumbnail']) ? $your_website['thumbnail'] : 'https://placehold.co/400x225/e9ecef/495057?text=No+Thumbnail'; ?>" class="card-img" alt="Thumbnail">
                 <div class="card-content">
                     <div class="profile-meta">
-                        <img src="<?= !empty($your_website['profile_photo']) ? $your_website['profile_photo'] : 'https://via.placeholder.com/150?text=User'; ?>" class="profile-img" alt="Foto Profil">
+                        <img src="<?= !empty($your_website['profile_photo']) ? $your_website['profile_photo'] : 'https://placehold.co/150x150/e9ecef/495057?text=User'; ?>" class="profile-img" alt="Foto Profil">
                         <span class="author-name"><?= htmlspecialchars($your_website['full_name']); ?></span>
                         <span class="badge-mine">Website Anda</span>
                     </div>
@@ -134,13 +136,13 @@ try {
         <?php if (!empty($all_projects)): ?>
             <?php foreach ($all_projects as $mhs): ?>
                 <div class="card">
-                    <img src="<?= !empty($mhs['thumbnail']) ? $mhs['thumbnail'] : 'https://via.placeholder.com/400x225?text=No+Thumbnail'; ?>" class="card-img" alt="Thumbnail">
+                    <img src="<?= !empty($mhs['thumbnail']) ? $mhs['thumbnail'] : 'https://placehold.co/400x225/e9ecef/495057?text=No+Thumbnail'; ?>" class="card-img" alt="Thumbnail">
                     <div class="card-content">
                         <div class="profile-meta">
-                            <img src="<?= !empty($mhs['profile_photo']) ? $mhs['profile_photo'] : 'https://via.placeholder.com/150?text=User'; ?>" class="profile-img" alt="Foto Profil">
+                            <img src="<?= !empty($mhs['profile_photo']) ? $mhs['profile_photo'] : 'https://placehold.co/150x150/e9ecef/495057?text=User'; ?>" class="profile-img" alt="Foto Profil">
                             <span class="author-name"><?= htmlspecialchars($mhs['full_name']); ?></span>
                         </div>
-                        <h3 class="card-title"><?= htmlspecialchars($mhs['website_title']); ?></h3>
+                        <h3 class="card-title"><?= htmlspecialchars($mhs['website_title'] ?? 'Belum ada judul'); ?></h3>
                         <p class="card-desc"><?= htmlspecialchars($mhs['bio'] ?? 'Tidak ada deskripsi singkat.'); ?></p>
                         <a href="detail.php?slug=<?= $mhs['slug']; ?>" class="btn-detail">Lihat Detail</a>
                     </div>

@@ -6,9 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once 'koneksi.php';
 
 try {
-    // Ambil 3 proyek teratas berdasarkan views_count (Most Viewed)
-    // Pastikan hanya menampilkan yang sudah mengisi judul website
-    $stmt = $pdo->query("SELECT * FROM users WHERE website_title IS NOT NULL AND website_title != '' ORDER BY views_count DESC LIMIT 3");
+    // Ambil 6 proyek teratas berdasarkan views_count (Most Viewed)
+    $stmt = $pdo->query("SELECT * FROM users ORDER BY views_count DESC LIMIT 6");
     $featured_projects = $stmt->fetchAll();
 } catch (PDOException $e) {
     $featured_projects = [];
@@ -73,11 +72,11 @@ try {
         <?php if (!empty($featured_projects)): ?>
             <?php foreach ($featured_projects as $mhs): ?>
                 <div class="card">
-                    <img src="<?= !empty($mhs['thumbnail']) ? $mhs['thumbnail'] : 'https://via.placeholder.com/400x225?text=No+Thumbnail'; ?>" class="card-img" alt="Thumbnail">
+                    <img src="<?= !empty($mhs['thumbnail']) ? $mhs['thumbnail'] : 'https://placehold.co/400x225/e9ecef/495057?text=No+Thumbnail'; ?>" class="card-img" alt="Thumbnail">
                     
                     <div class="card-content">
                         <div class="profile-meta">
-                            <img src="<?= !empty($mhs['profile_photo']) ? $mhs['profile_photo'] : 'https://via.placeholder.com/150?text=User'; ?>" class="profile-img" alt="Foto Profil">
+                            <img src="<?= !empty($mhs['profile_photo']) ? $mhs['profile_photo'] : 'https://placehold.co/150x150/e9ecef/495057?text=User'; ?>" class="profile-img" alt="Foto Profil">
                             <span class="author-name"><?= htmlspecialchars($mhs['full_name']); ?></span>
                         </div>
                         
