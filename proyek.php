@@ -21,6 +21,7 @@ if (isset($_SESSION['user_id'])) {
 $sql = "SELECT * FROM users WHERE 1=1";
 $params = [];
 
+//gagal mulu ngentot
 // Tambahkan filter pencarian
 if (!empty($search)) {
     $sql .= " AND (full_name LIKE :search OR website_title LIKE :search)";
