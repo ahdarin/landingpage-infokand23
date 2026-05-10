@@ -17,6 +17,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Alihkan pengunjung kembali ke halaman utama
-header("Location: index.php");
+header("Location: ../../index.php");
 exit();
 ?>

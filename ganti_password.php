@@ -1,7 +1,7 @@
 <?php
 // ganti_password.php
 session_start();
-require_once 'koneksi.php';
+require_once 'landingpageResources/config/koneksi.php';
 
 // Pastikan sudah login, tapi jangan gunakan auth_check.php agar tidak terjadi redirect loop
 if (!isset($_SESSION['user_id'])) {
@@ -53,38 +53,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Ganti Password Wajib</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="landingPageResources/assets/img/LOGO IF.png" type="image/png">
+    <title>Informatika'23 | Change Password</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f6f9; }
-        .card { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 380px; }
-        .form-group { margin-bottom: 15px; }
-        input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .error { color: red; margin-bottom: 15px; font-size: 14px; }
-        .success { color: green; margin-bottom: 15px; font-size: 14px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body>
+<body class="bg-white antialiased">
 
-<div class="card">
-    <h2>Ganti Password</h2>
-    <p style="font-size: 13px; color: #666;">Demi keamanan akun, Anda diwajibkan untuk mengganti password bawaan terlebih dahulu.</p>
-    
-    <?php if (!empty($error)): ?> <div class="error"><?= $error; ?></div> <?php endif; ?>
-    <?php if (!empty($success)): ?> <div class="success"><?= $success; ?></div> <?php endif; ?>
+    <div class="min-h-screen flex flex-col md:flex-row">
+        
+        <div class="hidden md:flex md:w-1/2 relative overflow-hidden items-center px-12 lg:px-24">
+            <div id="silk-container" class="absolute inset-0 z-0"></div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-8">
+                    <img src="landingPageResources/assets/img/LOGO IF.png" alt="Logo" class="w-10 h-10">
+                    <span class="text-white text-xl font-bold">Informatika'23</span>
+                </div>
+                <h1 class="text-white text-5xl lg:text-7xl font-bold mb-6 leading-tight">Welcome <br> Back</h1>
+                <p class="text-gray-400 text-lg max-w-md leading-relaxed">
+                    Continue your journey within the Informatika'23 creative ecosystem. Your innovation starts here.
+                </p>
+            </div>
+        </div>
 
-    <form action="ganti_password.php" method="POST">
-        <div class="form-group">
-            <label for="password_baru">Password Baru</label>
-            <input type="password" id="password_baru" name="password_baru" required>
+        <div class="flex-1 flex items-center justify-center p-6 bg-gray-200 md:bg-gray-50">
+            <div class="w-full max-w-md bg-white rounded-[2rem] p-8 md:p-10 shadow-2xl md:shadow-none border border-gray-100">
+                
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Ganti Password</h2>
+                    <p class="text-gray-500">Demi keamanan akun, Anda diwajibkan untuk mengganti password bawaan terlebih dahulu.</p>
+                </div>
+
+                <?php if (!empty($error)): ?>
+                    <div class="bg-red-50 text-red-600 p-4 rounded-xl mb-6 text-sm font-medium border border-red-100 flex items-center gap-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <?= $error; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($success)): ?>
+                    <div class="bg-teal-50 text-[#0d8276] p-4 rounded-xl mb-6 text-sm font-medium border border-teal-100 flex items-center gap-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <?= $success; ?>
+                    </div>
+                <?php endif; ?>
+
+                <form action="ganti_password.php" method="POST" class="space-y-6">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">New Password</label>
+                        <div class="relative group">
+                            <span class="absolute inset-y-0 left-4 flex items-center text-gray-400 group-focus-within:text-[#0d8276] transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            </span>
+                            <input type="password" id="password_baru" name="password_baru" required 
+                                class="w-full bg-gray-50 border border-gray-100 text-gray-900 rounded-2xl py-4 pl-10 pr-4 focus:outline-none focus:ring-4 focus:ring-[#0d8276]/10 focus:border-[#0d8276] transition-all"
+                                placeholder="Buat password baru">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Confirm New Password</label>
+                        <div class="relative group">
+                            <span class="absolute inset-y-0 left-4 flex items-center text-gray-400 group-focus-within:text-[#0d8276] transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            </span>
+                            <input type="password" id="konfirmasi_password" name="konfirmasi_password" required 
+                                class="w-full bg-gray-50 border border-gray-100 text-gray-900 rounded-2xl py-4 pl-10 pr-4 focus:outline-none focus:ring-4 focus:ring-[#0d8276]/10 focus:border-[#0d8276] transition-all"
+                                placeholder="Ulangi password baru">
+                        </div>
+                    </div>
+
+                    <button type="submit" 
+                        class="w-full bg-[#0d8276] hover:bg-[#0a6b61] text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-xl shadow-[#0d8276]/20 active:scale-[0.98]">
+                        Simpan Password <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    </button>
+                </form>
+
+            </div>
         </div>
-        <div class="form-group">
-            <label for="konfirmasi_password">Ulangi Password Baru</label>
-            <input type="password" id="konfirmasi_password" name="konfirmasi_password" required>
-        </div>
-        <button type="submit">Simpan Password</button>
-    </form>
-</div>
+    </div>
+
+    <script src="landingPageResources/assets/silk.js"></script>
 
 </body>
 </html>

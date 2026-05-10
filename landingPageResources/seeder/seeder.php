@@ -1,6 +1,6 @@
 <?php
 // seeder.php
-require_once 'koneksi.php';
+require_once '../config/koneksi.php';
 
 // Fungsi untuk membuat URL Slug otomatis
 function createSlug($string) {

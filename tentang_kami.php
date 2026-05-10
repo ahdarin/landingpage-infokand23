@@ -1,7 +1,21 @@
 <?php
-// tentang_kami.php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+require_once 'landingPageResources/config/koneksi.php';
+
+try {
+    // Menghitung total views dari semua user
+    $stmt_views = $pdo->query("SELECT SUM(views_count) as total_views FROM users");
+    $row_views = $stmt_views->fetch();
+    $total_views = $row_views['total_views'] ?? 0;
+
+    // Format angka (misal 1200 jadi 1.2k)
+    if ($total_views >= 1000) {
+        $formatted_views = round($total_views / 1000, 1) . 'k';
+    } else {
+        $formatted_views = $total_views;
+    }
+
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
 }
 ?>
 
@@ -9,64 +23,100 @@ if (session_status() === PHP_SESSION_NONE) {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Tentang Kami - Website Kelas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="landingPageResources/assets/img/LOGO IF.png" type="image/png">
+    <title>Informatika'23 | Tentang Kami</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f8f9fa; color: #333; }
-        .navbar { display: flex; justify-content: space-between; padding: 20px 5%; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .navbar a { text-decoration: none; color: #333; margin-left: 20px; font-weight: 500; }
-        .container { max-width: 800px; margin: 60px auto; padding: 0 20px; }
-        .about-card { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: center; }
-        .class-photo { width: 100%; height: auto; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 30px; background-color: #ddd; }
-        .about-card h1 { font-size: 32px; margin-bottom: 20px; color: #111; }
-        .about-card p { font-size: 16px; line-height: 1.8; color: #555; text-align: justify; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-top: 40px; }
-        .stat-box { background: #fdfdfd; border: 1px solid #eee; padding: 20px; border-radius: 8px; }
-        .stat-box h3 { font-size: 28px; color: #007bff; margin: 0 0 5px; }
-        .stat-box p { font-size: 14px; color: #666; margin: 0; text-align: center; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+
+        @keyframes scroll-smooth {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                /* Geser tepat separuh dari total lebar (karena kita punya 2 blok identik) */
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-marquee-smooth {
+            display: flex;
+            animation: scroll-smooth 30s linear infinite;
+        }
+
+        .min-w-max {
+            width: max-content;
+        }
     </style>
 </head>
-<body>
+<body class="bg-[#f8fafc] antialiased min-h-screen flex flex-col">
 
-<div class="navbar">
-    <div class="logo"><strong>Website Kelas</strong></div>
-    <div class="nav-links">
-        <a href="index.php">Home</a>
-        <a href="proyek.php">Proyek</a>
-        <a href="tentang_kami.php">Tentang Kami</a>
-        <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="edit_profil.php">Dashboard</a>
-            <a href="logout.php" style="color: red;">Logout</a>
-        <?php else: ?>
-            <a href="login.php">Login</a>
-        <?php endif; ?>
-    </div>
-</div>
+    <?php include 'landingPageResources/components/navbar.php'; ?>
 
-<div class="container">
-    <div class="about-card">
-        <img src="https://via.placeholder.com/800x400?text=Foto+Bersama+Kelas" class="class-photo" alt="Foto Bersama Kelas">
-        
-        <h1>Tentang Kelas Kami</h1>
-        <p>
-            Website ini dirancang sebagai platform portofolio bersama untuk menampilkan berbagai hasil karya dan proyek website yang dikembangkan oleh mahasiswa kelas kami. Melalui wadah ini, setiap mahasiswa dapat membagikan hasil belajarnya sekaligus melatih kemampuan pengembangan web secara langsung.
-        </p>
+    <main class="flex-grow w-full pt-32 pb-20">
+        <div class="max-w-5xl mx-auto px-4 md:px-8">
+            
+            <div class="bg-gradient-to-br from-white to-gray-100 rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-white flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 relative overflow-hidden">
+                
+                <img src="landingPageResources/assets/img/kicau.gif" 
+                    alt="kicau" 
+                    class="hidden md:block absolute bottom-4 right-8 w-12 h-12 object-contain opacity-80 pointer-events-none">
 
-        <div class="stats-grid">
-            <div class="stat-box">
-                <h3>30+</h3>
-                <p>Mahasiswa</p>
+                <div class="absolute -right-20 -top-20 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-[6px] border-white shadow-xl overflow-hidden flex-shrink-0 z-10 bg-white flex items-center justify-center p-6">
+                    <img src="landingPageResources/assets/img/LOGO IF-02.png" alt="Logo Informatika" class="w-full h-full object-contain">
+                </div>
+
+                <div class="flex flex-col items-center md:items-start text-center md:text-left z-10 pt-2">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">Informatika'23</h1>
+                    <p class="text-gray-600 text-lg mb-8 max-w-xl leading-relaxed">
+                        Wadah kreativitas dan inovasi mahasiswa Informatika Universitas Andalas angkatan 2023. Kami berdedikasi untuk terus bereksplorasi dalam dunia teknologi dan membangun masa depan digital yang lebih baik.
+                    </p>
+
+                    <div class="bg-white rounded-3xl px-8 py-4 shadow-sm border border-gray-100 inline-flex items-center divide-x divide-gray-200">
+                        <div class="flex flex-col items-center px-6">
+                            <span class="text-[#0d8276] font-bold text-2xl leading-none mb-1">41</span>
+                            <span class="text-[9px] font-bold text-gray-400 tracking-widest uppercase">Members</span>
+                        </div>
+                        <div class="flex flex-col items-center px-6">
+                            <span class="text-[#0d8276] font-bold text-2xl leading-none mb-1"><?= $formatted_views; ?></span>
+                            <span class="text-[9px] font-bold text-gray-400 tracking-widest uppercase">Total Views</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-box">
-                <h3>1</h3>
-                <p>Visi Bersama</p>
+
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-600 leading-relaxed">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Visi Kami</h2>
+                    <p>Menjadi angkatan yang solid, kompetitif, dan adaptif terhadap perkembangan teknologi informasi terkini, serta berkontribusi nyata bagi lingkungan sekitar melalui karya digital.</p>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Misi Kami</h2>
+                    <p>Mendorong setiap anggota untuk mempublikasikan proyek mereka, berbagi pengetahuan, dan menjalin kolaborasi antar sesama mahasiswa dalam ekosistem kreatif Informatika'23.</p>
+                </div>
             </div>
-            <div class="stat-box">
-                <h3>Aktif</h3>
-                <p>Kolaborasi</p>
+
+        </div>
+    </main>
+
+    <div class="w-full bg-[#0d8276] py-3 overflow-hidden border-y border-white/10 mt-20 relative">
+        <div class="flex min-w-max animate-marquee-smooth">
+            
+            <div class="flex items-center text-white font-bold text-xs md:text-sm tracking-[0.2em] uppercase py-1">
+                <span>&nbsp;✦ KAELA ✦ LARA ✦ AHDA ✦ ALIFFIA ✦ DEVIA ✦ NIA ✦ NUGI ✦ WAHYU ✦ CHATGPT ✦ EZZA ✦ IMBANG ✦ DILA ✦ JIBOY ✦ KEVIN ✦ HAFIZ ✦ GALID ✦ DAWI ✦ GEMINI ✦ RIFKI ✦ GHAZI ✦ RAHUL ✦ REYNARD ✦ BUCEL ✦ INDAH ✦ SHERLY ✦ FARHAN ✦ PERPLEXITY ✦ FAWWAZ ✦ LUTHFI ✦ STANLEY ✦ CLAUDE ✦ PIA ✦ SURDIK ✦ FARREL ✦ FIKHRI ✦ REZA ✦ IRFAN ✦ IRGI ✦ COPILOT ✦ FATHUR ✦ AMIN ✦ FARIZ ✦ RAFKI ✦ GEPE ✦ GROK ✦ RIDHO ✦ FAYI&nbsp;</span>
             </div>
+
+            <div class="flex items-center text-white font-bold text-xs md:text-sm tracking-[0.2em] uppercase py-1">
+                <span>&nbsp;✦ KAELA ✦ LARA ✦ AHDA ✦ ALIFFIA ✦ DEVIA ✦ NIA ✦ NUGI ✦ WAHYU ✦ CHATGPT ✦ EZZA ✦ IMBANG ✦ DILA ✦ JIBOY ✦ KEVIN ✦ HAFIZ ✦ GALID ✦ DAWI ✦ GEMINI ✦ RIFKI ✦ GHAZI ✦ RAHUL ✦ REYNARD ✦ BUCEL ✦ INDAH ✦ SHERLY ✦ FARHAN ✦ PERPLEXITY ✦ FAWWAZ ✦ LUTHFI ✦ STANLEY ✦ CLAUDE ✦ PIA ✦ SURDIK ✦ FARREL ✦ FIKHRI ✦ REZA ✦ IRFAN ✦ IRGI ✦ COPILOT ✦ FATHUR ✦ AMIN ✦ FARIZ ✦ RAFKI ✦ GEPE ✦ GROK ✦ RIDHO ✦ FAYI&nbsp;</span>
+            </div>
+
         </div>
     </div>
-</div>
+    <?php include 'landingPageResources/components/footer.php'; ?>
 
 </body>
 </html>
