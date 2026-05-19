@@ -1,9 +1,10 @@
 <?php
+
 // Logika Backend
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once 'landingpageResources/config/koneksi.php';
+require_once 'landingPageResources/config/koneksi.php';
 
 $your_website = null;
 if (isset($_SESSION['user_id'])) {
@@ -13,7 +14,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 try {
-    $stmt = $pdo->query("SELECT * FROM users ORDER BY views_count DESC LIMIT 6");
+    $stmt = $pdo->query("SELECT * FROM users WHERE is_password_changed = 1 AND is_hidden = 0 ORDER BY views_count DESC LIMIT 6");
     $featured_projects = $stmt->fetchAll();
 } catch (PDOException $e) {
     $featured_projects = [];
@@ -57,7 +58,7 @@ try {
 
     <div class="relative">
         <?php 
-        include 'landingpageResources/components/navbar.php'; 
+        include 'landingPageResources/components/navbar.php'; 
         ?>
 
         <!-- Hero Section -->
@@ -73,12 +74,12 @@ try {
                     <p class="text-gray-300 text-lg mb-8 max-w-md">
                         Discover and showcase personal websites, digital portfolio, and creative projects from Informatika'23 students.
                     </p>
-                    <div class="flex gap-4">
-                        <a href="proyek.php" class="bg-[#0d8276] hover:bg-[#0a6b61] px-6 py-3 rounded-full font-medium flex items-center gap-2 transition shadow-lg shadow-teal-500/20">
+                    <div class="flex gap-2 md:gap-4 w-full max-w-md mx-auto md:mx-0">
+                        <a href="proyek.php" class="flex-1 bg-[#0d8276] hover:bg-[#0a6b61] px-4 md:px-6 py-3 rounded-full font-medium flex items-center justify-center gap-1.5 md:gap-2 transition shadow-lg shadow-teal-500/20 text-xs md:text-base text-white whitespace-nowrap">
                             Explore Projects <span>→</span>
                         </a>
-                        <a href="https://instagram.com/if.ua23"  target="_blank" class="inline-block border border-gray-400 hover:border-white px-6 py-3 rounded-full font-medium transition hover:bg-white/5 text-center">
-                            Visit our Instagram <span>↗</span>
+                        <a href="https://instagram.com/if.ua23" target="_blank" class="flex-1 inline-block border border-gray-400 hover:border-white px-4 md:px-6 py-3 rounded-full font-medium transition hover:bg-white/5 text-center text-xs md:text-base whitespace-nowrap">
+                            Our Instagram <span>↗</span>
                         </a>
                     </div>
                 </div>
@@ -89,7 +90,7 @@ try {
                     <div class="absolute top-0 right-20 bg-gray-800 p-2 rounded-xl shadow-2xl border border-gray-700 w-64 transform rotate-[-5deg] hover:rotate-0 transition duration-300">
                         <!-- Container dengan Rasio 400x250 (1.6:1) -->
                         <div class="w-full aspect-[400/250] bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center p-4">
-                            <img src="landingpageResources/assets/img/Logo Unand PTNBH.png" 
+                            <img src="landingPageResources/assets/img/Logo Unand PTNBH.png" 
                                 class="max-w-full max-h-full object-contain" 
                                 alt="Project 1">
                         </div>
@@ -100,7 +101,7 @@ try {
                     <div class="absolute bottom-0 right-0 bg-gray-800 p-2 rounded-xl shadow-2xl border border-gray-700 w-64 transform rotate-[5deg] hover:rotate-0 transition duration-300">
                         <!-- Container dengan Rasio 400x250 (1.6:1) -->
                         <div class="w-full aspect-[400/250] bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center p-4">
-                            <img src="landingpageResources/assets/img/LOGO IF.png" 
+                            <img src="landingPageResources/assets/img/LOGO IF.png" 
                                 class="max-w-full max-h-full object-contain" 
                                 alt="Project 2">
                         </div>
@@ -114,10 +115,10 @@ try {
         <section class="bg-white py-24 px-8" id="tentang">
             <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                 <div class="relative">
-                    <img src="landingpageResources/assets/img/class-photo.webp" alt="Class Photo" class="rounded-2xl shadow-lg w-full aspect-video md:aspect-auto md:h-80 object-cover">
+                    <img src="landingPageResources/assets/img/class-photo.webp" alt="Class Photo" class="rounded-2xl shadow-lg w-full aspect-video md:aspect-auto md:h-80 object-cover">
                     <div class="absolute -bottom-6 right-6 bg-[#0d8276] text-white p-6 rounded-2xl shadow-xl">
                         <h3 class="text-3xl font-bold">200+</h3>
-                        <p class="text-sm font-medium">Dosa Besar Capstone</p>
+                        <p class="text-sm font-medium">Projects Launched</p>
                     </div>
                 </div>
                 <div>
@@ -191,7 +192,7 @@ try {
                 <div class="flex justify-between items-end mb-12">
                     <div>
                         <h2 class="text-3xl font-bold text-gray-900 mb-2">Featured Websites</h2>
-                        <p class="text-gray-500">Discover the latest additions to the directory</p>
+                        <p class="text-gray-500">Discover the most viewed websites in the directory</p>
                     </div>
                     <a href="proyek.php" class="text-[#0d8276] font-bold hover:text-[#0a6b61] flex flex-row items-center gap-1 whitespace-nowrap shrink-0">
                         VIEW ALL <span>→</span>
@@ -221,8 +222,40 @@ try {
             </div>
         </section>
 
-        <?php include 'landingpageResources/components/footer.php'; ?>
+        <?php include 'landingPageResources/components/footer.php'; ?>
     </div>
+
+    <?php if (isset($_SESSION['toast_error'])): ?>
+        <div id="toast-error" class="fixed bottom-5 left-5 z-50 bg-red-600/90 text-white font-medium px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-red-500 transform translate-y-20 opacity-0 transition-all duration-500 ease-out">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <span class="text-sm tracking-wide"><?= htmlspecialchars($_SESSION['toast_error']); ?></span>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const toast = document.getElementById('toast-error');
+                if (toast) {
+                    // Munculkan Toast (Slide Up & Fade In)
+                    setTimeout(() => {
+                        toast.classList.remove('translate-y-20', 'opacity-0');
+                        toast.classList.add('translate-y-0', 'opacity-100');
+                    }, 100);
+
+                    // Sembunyikan otomatis setelah 5 detik
+                    setTimeout(() => {
+                        toast.classList.remove('translate-y-0', 'opacity-100');
+                        toast.classList.add('translate-y-20', 'opacity-0');
+                    }, 5100);
+                }
+            });
+        </script>
+    <?php 
+        // Hapus session agar tidak muncul berulang-ulang saat page di-refresh
+        unset($_SESSION['toast_error']); 
+    endif; 
+    ?>
 
     <script src="landingPageResources/assets/grainient.js"></script>
     <script>

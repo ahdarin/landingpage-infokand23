@@ -3,7 +3,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once 'landingpageResources/config/koneksi.php';
+require_once 'landingPageResources/config/koneksi.php';
 
 // 2. Tangkap Parameter Filter (Search & Sort)
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -18,12 +18,17 @@ if (isset($_SESSION['user_id'])) {
 }
 
 // 4. Bangun Query Dinamis untuk "All Websites"
-$sql = "SELECT * FROM users WHERE 1=1";
+// Ditambahkan kondisi HANYA yang sudah ganti password (is_password_changed = 1) dan tidak tersembunyi (is_hidden = 0)
+$sql = "SELECT * FROM users WHERE is_password_changed = 1 AND is_hidden = 0";
 $params = [];
 
 if (!empty($search)) {
-    $sql .= " AND (full_name LIKE :search OR website_title LIKE :search OR bio LIKE :search)";
-    $params[':search'] = '%' . $search . '%';
+    // Memisahkan penamaan parameter (:search1, :search2, :search3) agar PDO membacanya dengan benar
+    $sql .= " AND (full_name LIKE :search1 OR website_title LIKE :search2 OR bio LIKE :search3)";
+    $searchTerm = '%' . $search . '%';
+    $params[':search1'] = $searchTerm;
+    $params[':search2'] = $searchTerm;
+    $params[':search3'] = $searchTerm;
 }
 
 // Logika Pengurutan
@@ -32,7 +37,8 @@ if ($sort === 'name') {
 } elseif ($sort === 'most_viewed') {
     $sql .= " ORDER BY views_count DESC";
 } elseif ($sort === 'newest') {
-    $sql .= " ORDER BY id DESC";
+    // Diubah berdasarkan updated_at sesuai permintaan kamu
+    $sql .= " ORDER BY updated_at DESC";
 } else {
     $sql .= " ORDER BY nim ASC";
 }
@@ -62,7 +68,7 @@ try {
 <body class="bg-white antialiased min-h-screen flex flex-col">
 
     <?php 
-        include 'landingpageResources/components/navbar.php'; 
+        include 'landingPageResources/components/navbar.php'; 
     ?>
 
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 md:px-8 pt-36 pb-12">
@@ -184,7 +190,7 @@ try {
     </main>
 
     <!-- Memanggil Footer -->
-    <?php include 'landingpageResources/components/footer.php'; ?>
+    <?php include 'landingPageResources/components/footer.php'; ?>
 
 </body>
 </html>

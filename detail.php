@@ -3,24 +3,27 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once 'landingpageResources/config/koneksi.php';
+require_once 'landingPageResources/config/koneksi.php';
 
 // 1. Ambil parameter slug dari URL
 $slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
 
 if (empty($slug)) {
-    header("Location: proyek.php");
+    $_SESSION['toast_error'] = "User data not found or the user has not verified their account yet.";
+    header("Location: index.php");
     exit();
 }
 
 try {
-    // 2. Ambil data mahasiswa berdasarkan slug
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE slug = :slug");
+    // 2. Ambil data mahasiswa berdasarkan slug DAN pastikan sudah ganti password (is_password_changed = 1)
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE slug = :slug AND is_password_changed = 1 AND is_hidden = 0");
     $stmt->execute([':slug' => $slug]);
     $mhs = $stmt->fetch();
 
+    // Jika data tidak ditemukan atau is_password_changed masih 0
     if (!$mhs) {
-        header("Location: proyek.php"); // Atau tampilkan pesan error
+        $_SESSION['toast_error'] = "User data not found or the user has not verified their account yet.";
+        header("Location: index.php");
         exit();
     }
 
@@ -33,8 +36,8 @@ try {
         $mhs['views_count'] += 1;
     }
 
-    // 4. Ambil Proyek Lain (Archive) secara acak untuk rekomendasi bawah
-    $stmt_others = $pdo->prepare("SELECT * FROM users WHERE id != :id ORDER BY RAND() LIMIT 3");
+    // 4. Ambil Proyek Lain (Archive) secara acak yang SUDAH ganti password juga
+    $stmt_others = $pdo->prepare("SELECT * FROM users WHERE id != :id AND is_password_changed = 1 AND is_hidden = 0 ORDER BY RAND() LIMIT 3");
     $stmt_others->execute([':id' => $mhs['id']]);
     $other_projects = $stmt_others->fetchAll();
 
@@ -59,28 +62,22 @@ try {
 <body class="bg-white antialiased min-h-screen flex flex-col">
 
     <?php 
-    include 'landingpageResources/components/navbar.php'; 
+    include 'landingPageResources/components/navbar.php'; 
     ?>
 
     <main class="flex-grow w-full pt-28 pb-0">
         
-        <!-- Header Banner Section -->
         <div class="max-w-7xl mx-auto px-4 md:px-8">
             
             <div class="relative w-full aspect-video md:aspect-auto md:h-[500px] rounded-[32px] overflow-hidden shadow-lg group">
                 
-                <!-- Banner Image (Thumbnail) -->
                 <img src="<?= !empty($mhs['thumbnail']) ? $mhs['thumbnail'] : 'https://placehold.co/1200x600/e2e8f0/64748b?text=No+Thumbnail'; ?>" 
                     alt="Project Banner" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
                 
-                <!-- Overlay Gradient -->
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"></div>
                 
-                <!-- Content Container -->
-                <!-- Menggunakan flex-row permanen agar judul (kiri) dan tombol (kanan) selalu sejajar -->
                 <div class="absolute bottom-0 left-0 w-full p-6 md:p-12 flex flex-row justify-between items-end gap-4 md:gap-6">
                     
-                    <!-- Teks Section: flex-1 agar teks mengambil ruang yang tersisa -->
                     <div class="text-left flex-1 min-w-0">
                         <h1 class="text-xl md:text-5xl font-bold text-white mb-1 md:mb-2 leading-tight truncate md:whitespace-normal">
                             <?= htmlspecialchars($mhs['website_title'] ?? 'Project Title'); ?>
@@ -90,7 +87,6 @@ try {
                         </p>
                     </div>
                     
-                    <!-- Tombol Section: whitespace-nowrap agar tombol tidak gepeng -->
                     <?php if (!empty($mhs['website_link'])): ?>
                     <a href="<?= htmlspecialchars($mhs['website_link']); ?>" target="_blank" 
                     class="bg-[#0d8276] hover:bg-[#0a6b61] text-white px-5 md:px-8 py-2.5 md:py-3.5 rounded-full text-xs md:text-base font-bold flex items-center gap-2 transition shadow-lg shadow-teal-500/30 whitespace-nowrap shrink-0">
@@ -104,10 +100,8 @@ try {
                 </div>
             </div>
 
-            <!-- Content Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-16 mb-24">
                 
-                <!-- Left Content: Description -->
                 <div class="lg:col-span-2">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Project Overview</h2>
                     <div class="text-gray-600 leading-relaxed whitespace-pre-line">
@@ -115,7 +109,6 @@ try {
                     </div>
                 </div>
 
-                <!-- Right Content: Author Info Card -->
                 <div class="lg:col-span-1">
                     <div class="bg-white sticky top-24 rounded-3xl p-8 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col items-center text-center">
                         <div class="w-24 h-24 rounded-full overflow-hidden mb-4 ring-4 ring-gray-50">
@@ -130,7 +123,6 @@ try {
                         </p>
                         
                         <div class="w-full flex flex-col gap-3">
-                            <!-- Tombol Views (Informasi) -->
                             <div class="w-full bg-gray-50 text-gray-500 font-bold py-3 rounded-xl flex items-center justify-center gap-3 border border-gray-100">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -140,7 +132,6 @@ try {
                                 <span class="text-gray-900"><?= number_format($mhs['views_count']); ?></span>
                             </div>
 
-                            <!-- Tombol Edit Profil: Muncul HANYA jika ini adalah halaman milik user yang login -->
                             <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $mhs['id']): ?>
                                 <a href="edit_profil.php" class="w-full bg-[#0d8276] hover:bg-[#0a6b61] text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-500/20">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -157,7 +148,6 @@ try {
             </div>
         </div>
 
-        <!-- Archive Section (Rekomendasi Lain) -->
         <?php if (!empty($other_projects)): ?>
         <section class="bg-[#f8fafc] py-20 px-8 border-t border-gray-100">
             <div class="max-w-7xl mx-auto">
@@ -193,7 +183,8 @@ try {
 
     </main>
 
-    <?php include 'landingpageResources/components/footer.php'; ?>
+    
+    <?php include 'landingPageResources/components/footer.php'; ?>
 
 </body>
 </html>

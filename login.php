@@ -1,7 +1,7 @@
 <?php
 // login.php
 session_start();
-require_once 'landingpageResources/config/koneksi.php';
+require_once 'landingPageResources/config/koneksi.php';
 
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -108,14 +108,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </span>
                             <input type="text" name="nim" required 
                                 class="w-full bg-gray-50 border border-gray-100 text-gray-900 rounded-2xl py-4 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-[#0d8276]/20 focus:border-[#0d8276] transition-all"
-                                placeholder="Masukkan NIM Anda">
+                                placeholder="Enter your Student ID (NIM)">
                         </div>
                     </div>
 
                     <div>
                         <div class="flex justify-between items-center mb-2 ml-1">
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Password</label>
-                            <a href="https://open.spotify.com/track/1XabvPK1VQEH4YqzDovs46?si=228b24bd30024512" class="text-[10px] font-bold text-[#0d8276] uppercase tracking-wider">Forgot Password</a>
+                            <a href="forgot_password.php" class="text-[10px] font-bold text-[#0d8276] uppercase tracking-wider">Forgot Password</a>
                         </div>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-4 flex items-center text-gray-400">

@@ -1,7 +1,17 @@
 <?php
 // edit_profil.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once 'landingPageResources/config/koneksi.php';
-require_once 'landingPageResources/config/auth_check.php';
+
+
+// 1. Cek apakah user sudah login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
 $user_id = $_SESSION['user_id'];
 $error = '';
@@ -101,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="landingPageResources/assets/img/LOGO IF.png" type="image/png">
-    <title>Edit Profile - Informatika'23</title>
+    <title>Informatika'23 | Edit Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');

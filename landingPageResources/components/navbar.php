@@ -36,13 +36,13 @@ function getDynamicLink($target, $current_page) {
                 <nav class="hidden md:flex gap-6 text-sm font-medium relative">
                     <a href="<?= getDynamicLink('beranda', $current_page) ?>" 
                        data-target="beranda"
-                       class="nav-link transition-colors duration-500 text-gray-600">
+                       class="nav-link transition-colors duration-500 <?= ($current_page === 'index.php') ? 'text-[#0d8276]' : 'text-gray-600 hover:text-[#0d8276]' ?>">
                        Beranda
                     </a>
 
                     <a href="<?= getDynamicLink('tentang', $current_page) ?>" 
                        data-target="tentang"
-                       class="nav-link transition-colors duration-500 text-gray-600 hover:text-[#0d8276]">
+                       class="nav-link transition-colors duration-500 <?= ($current_page === 'tentang_kami.php') ? 'text-[#0d8276]' : 'text-gray-600 hover:text-[#0d8276]' ?>">
                        Tentang Kami
                     </a>
 
@@ -53,12 +53,15 @@ function getDynamicLink($target, $current_page) {
                        Proyek
                     </a>
 
-                    <?php if($current_page === 'index.php' || $current_page === 'proyek.php'): ?>
+                    <?php if($current_page === 'index.php' || $current_page === 'proyek.php' || $current_page === 'tentang_kami.php'): ?>
                         <div id="nav-underline" 
-                            class="absolute bottom-[-6px] h-[2px] bg-[#0d8276] transition-all duration-500 ease-in-out 
-                            <?= ($current_page === 'proyek.php') ? 'opacity-100' : 'opacity-0' ?>"
+                            class="absolute bottom-[-6px] h-[2px] bg-[#0d8276] transition-all duration-500 ease-in-out opacity-100"
                             <?php 
-                                if($current_page === 'proyek.php') {
+                                if($current_page === 'index.php') {
+                                    echo 'style="width: 58px; left: 0px;"'; 
+                                } else if($current_page === 'tentang_kami.php') {
+                                    echo 'style="width: 96px; left: 78px;"'; 
+                                } else if($current_page === 'proyek.php') {
                                     echo 'style="width: 52px; left: 192px;"'; 
                                 }
                             ?>>

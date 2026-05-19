@@ -2,9 +2,9 @@
 // koneksi.php
 
 $host = "localhost";
-$user = "root";     // Sesuaikan dengan user database Anda
-$pass = "";         // Sesuaikan dengan password database Anda
-$db   = "db_infokand"; // Nama database yang baru saja kita buat
+$user = "u666867719_ahdarin";
+$pass = "ahdarin25DATABASE";
+$db   = "u666867719_1003";
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [

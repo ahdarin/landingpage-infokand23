@@ -78,7 +78,7 @@ try {
 
                     <div class="bg-white rounded-3xl px-8 py-4 shadow-sm border border-gray-100 inline-flex items-center divide-x divide-gray-200">
                         <div class="flex flex-col items-center px-6">
-                            <span class="text-[#0d8276] font-bold text-2xl leading-none mb-1">41</span>
+                            <span class="text-[#0d8276] font-bold text-2xl leading-none mb-1">42</span>
                             <span class="text-[9px] font-bold text-gray-400 tracking-widest uppercase">Members</span>
                         </div>
                         <div class="flex flex-col items-center px-6">
@@ -91,12 +91,12 @@ try {
 
             <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-600 leading-relaxed">
                 <div>
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Visi Kami</h2>
-                    <p>Menjadi angkatan yang solid, kompetitif, dan adaptif terhadap perkembangan teknologi informasi terkini, serta berkontribusi nyata bagi lingkungan sekitar melalui karya digital.</p>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Beyond the Code</h2>
+                    <p>We believe that Informatics is more than just writing syntax or building complex algorithms. It is the art of turning abstract ideas into real, interactive digital solutions that bring a meaningful impact to the world around us.</p>
                 </div>
                 <div>
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Misi Kami</h2>
-                    <p>Mendorong setiap anggota untuk mempublikasikan proyek mereka, berbagi pengetahuan, dan menjalin kolaborasi antar sesama mahasiswa dalam ekosistem kreatif Informatika'23.</p>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">The Digital Atelier</h2>
+                    <p>This is our creative sanctuary. A living archive that captures our journey, our learning process, and the final results of our best projects as we build the technology of tomorrow.</p>
                 </div>
             </div>
 

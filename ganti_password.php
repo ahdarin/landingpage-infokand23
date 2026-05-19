@@ -1,7 +1,7 @@
 <?php
 // ganti_password.php
 session_start();
-require_once 'landingpageResources/config/koneksi.php';
+require_once 'landingPageResources/config/koneksi.php';
 
 // Pastikan sudah login, tapi jangan gunakan auth_check.php agar tidak terjadi redirect loop
 if (!isset($_SESSION['user_id'])) {
@@ -68,16 +68,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="min-h-screen flex flex-col md:flex-row">
         
         <div class="hidden md:flex md:w-1/2 relative overflow-hidden items-center px-12 lg:px-24">
+
             <div id="silk-container" class="absolute inset-0 z-0"></div>
             
             <div class="relative z-10">
                 <div class="flex items-center gap-3 mb-8">
-                    <img src="landingPageResources/assets/img/LOGO IF.png" alt="Logo" class="w-10 h-10">
+                    <img src="landingPageResources/assets/img/LOGO IF.png" alt="Logo" class="w-10 h-10 bg-white rounded-full p-1">
                     <span class="text-white text-xl font-bold">Informatika'23</span>
                 </div>
-                <h1 class="text-white text-5xl lg:text-7xl font-bold mb-6 leading-tight">Welcome <br> Back</h1>
+                <h1 class="text-white text-5xl lg:text-7xl font-bold mb-6 leading-tight">Change <br> <span class="text-[#7DF5F4]">Password</span></h1>
                 <p class="text-gray-400 text-lg max-w-md leading-relaxed">
-                    Continue your journey within the Informatika'23 creative ecosystem. Your innovation starts here.
+                    Keep your account safe and maintain secure access to the Informatika'23 ecosystem.
                 </p>
             </div>
         </div>
@@ -85,9 +86,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="flex-1 flex items-center justify-center p-6 bg-gray-200 md:bg-gray-50">
             <div class="w-full max-w-md bg-white rounded-[2rem] p-8 md:p-10 shadow-2xl md:shadow-none border border-gray-100">
                 
-                <div class="mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Ganti Password</h2>
-                    <p class="text-gray-500">Demi keamanan akun, Anda diwajibkan untuk mengganti password bawaan terlebih dahulu.</p>
+                <div class="mb-8 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-teal-50 text-[#0d8276] rounded-full mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Secure Your Account</h2>
+                    <p class="text-sm text-gray-500">Because this is your first login, you are required to change your password for security reasons.</p>
                 </div>
 
                 <?php if (!empty($error)): ?>
@@ -113,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </span>
                             <input type="password" id="password_baru" name="password_baru" required 
                                 class="w-full bg-gray-50 border border-gray-100 text-gray-900 rounded-2xl py-4 pl-10 pr-4 focus:outline-none focus:ring-4 focus:ring-[#0d8276]/10 focus:border-[#0d8276] transition-all"
-                                placeholder="Buat password baru">
+                                placeholder="Enter your new password">
                         </div>
                     </div>
 
@@ -125,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </span>
                             <input type="password" id="konfirmasi_password" name="konfirmasi_password" required 
                                 class="w-full bg-gray-50 border border-gray-100 text-gray-900 rounded-2xl py-4 pl-10 pr-4 focus:outline-none focus:ring-4 focus:ring-[#0d8276]/10 focus:border-[#0d8276] transition-all"
-                                placeholder="Ulangi password baru">
+                                placeholder="Re-enter your new password">
                         </div>
                     </div>
 
